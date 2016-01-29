@@ -1,7 +1,8 @@
-class SectionTag
-  def self.replacement_str(type, inner_text, _, front_matter)
-    type = type.to_lower.gsub(' ', '')
+class StyleTag
+  def self.process_node(node, _, front_matter)
+    type = node.get_attribute('type').downcase.gsub(' ', '')
     return '<p align="center"/>' if type == 'strikethrough'
+    inner_text = node.children.to_xhtml
     replace = case type
               when 'bold|italic|smallcaps'
                 "<emph type=\"10\"><emph type=\"6\">#{inner_text}</emph></emph>"
@@ -15,13 +16,13 @@ class SectionTag
                 "<emph type=\"2\"><emph type=\"6\">#{inner_text}</emph></emph>"
               when 'bold'
                 "<emph type=\"1\">#{inner_text}</emph>"
-              when /italic/.match(text)
+              when /italic/.match(type)
                 "<emph type=\"2\">#{inner_text}</emph>"
               when 'underline'
                 "<emph type=\"4\">#{inner_text}</emph>"
-              when /smallcaps/.match(text)
+              when /smallcaps/.match(type)
                 "<emph type=\"6\">#{inner_text}</emph>"
-              when /superscript/.match(text)
+              when /superscript/.match(type)
                 "<emph type=\"7\">#{inner_text}</emph>"
               when 'subscript'
                 "<emph type=\"8\">#{inner_text}</emph>"
@@ -30,6 +31,8 @@ class SectionTag
               else
                 inner_text
               end
-    "<p align=\"#{front_matter ? 'center' : 'left'}\">#{replace}</p>"
+    node.name = 'p'
+    node.set_attribute('align', (front_matter ? 'center' : 'left'))
+    node.remove_attribute 'type'
   end
 end

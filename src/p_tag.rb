@@ -1,6 +1,6 @@
-class SectionTag
+class PTag
   def self.replacement_str(type, inner_text, chapter_index, front_matter)
-    type = type.to_lower.gsub(' ', '')
+    type = type.downcase.gsub(' ', '')
     front_matter ? front_matter_replace(type, inner_text) : body_replace(type, inner_text, chapter_index)
   end
 

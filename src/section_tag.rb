@@ -1,6 +1,6 @@
 class SectionTag
   def self.replacement_str(type, inner_text, chapter_index, front_matter)
-    type = type.to_lower.gsub(' ', '')
+    type = type.downcase.gsub(' ', '')
     if front_matter
       if type == 'frontmatterintroduction'
         "<supmatl><title>#{inner_text}</title></supmatl>"

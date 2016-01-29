@@ -1,2 +1,0 @@
-class TypefiError < StandardError
-end

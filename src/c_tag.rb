@@ -1,6 +1,6 @@
 class CTag
   def self.replacement_str(type, inner_text, chapter_index, front_matter)
-    type = type.to_lower.gsub(' ', '')
+    type = type.downcase.gsub(' ', '')
     inner_text = inner_text.trim
     replace_text = case type
                    when 'bold'

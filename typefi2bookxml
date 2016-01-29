@@ -21,7 +21,7 @@ module Typefi2bookxml
           doc = TypefiDocument.new(file)
           doc.parse!
           # BookXmlDocument.new(doc).write!
-        rescue EbookimatorError => ex
+        rescue Typefi2bookxmlError => ex
           puts "ERROR: #{ex.message}"
         end
       end

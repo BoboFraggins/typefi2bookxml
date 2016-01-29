@@ -16,7 +16,7 @@ class SectionTag
     when 'cap1', 'caption', 'v_s', 'v_m', 'v_e'
       "<bq><p align=\"left\"><emph type=\"2\">#{inner_text}</emph></p></bq>"
     when 'dlg1_s', 'dlg1_m', 'dlg1_e', 'ep1', 'index2', 'index3', 'v', 'v_epigraph'
-      "<bq><p align="left">#{inner_text}</p></bq>"
+      "<bq><p align=\"left\">#{inner_text}</p></bq>"
     when 'ep1s_2'
       "<bq><p align=\"center\"><emph type=\"2\">#{inner_text}</emph></p></bq>"
     when 'ep1_2'

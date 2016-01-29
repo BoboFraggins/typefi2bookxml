@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+Bundler.require
+require 'optparse'
+Dir["#{File.dirname(__FILE__)}/src/**/*.rb"].each { |file| require file }
+
+module Typefi2bookxml
+  class Application
+    def initialize(argv)
+      @params, @files = parse_options(argv)
+    end
+
+    def run
+      @files.each do |file|
+        unless File.exist? file
+          puts "ERROR: file does not exist: #{file}"
+          exit
+        end
+        begin
+          doc = TypefiDocument.new(file)
+          doc.parse!
+          # BookXmlDocument.new(doc).write!
+        rescue EbookimatorError => ex
+          puts "ERROR: #{ex.message}"
+        end
+      end
+    end
+
+    private
+
+    def parse_options(_)
+      params = {}
+      files = OptionParser.new do |opts|
+        opts.banner = "Converts Typefi2 files into BookXML.\n\n" +
+                      "Usage: typefi2bookxml [options] files\n"
+
+        opts.on_tail('-v', '--version', 'Show version') do
+          puts "typefi2bookxml version: #{Typefi2bookxml::VERSION}"
+          exit
+        end
+
+        opts.on_tail('-?', '-h', '--help', 'Show this message') do
+          puts opts
+          exit
+        end
+      end.parse!
+
+      [params, files]
+    end
+  end
+end
+
+Typefi2bookxml::Application.new(ARGV).run

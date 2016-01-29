@@ -1,0 +1,2 @@
+class TypefiError < StandardError
+end

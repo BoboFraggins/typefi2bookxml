@@ -20,7 +20,17 @@ class TypefiDocument
 
   def parse_node!(node, section_index, front_matter)
     node.children.each { |child| parse_node!(child, section_index, front_matter) }
-    node.remove if node.name == 's'
-    StyleTag.process_node(node, section_index, front_matter) if node.name == 'style'
+    case node.name
+    when 's', 't'
+      node.remove
+    when 'c'
+      CTag.process_node(node, section_index, front_matter)
+    when 'p'
+      PTag.process_node(node, section_index, front_matter)
+    when 'style'
+      StyleTag.process_node(node, section_index, front_matter)
+    when 'section'
+      SectionTag.process_node(node, section_index, front_matter)
+    end
   end
 end

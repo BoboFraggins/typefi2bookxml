@@ -2,7 +2,7 @@ class StyleTag
   def self.process_node(node, _, front_matter)
     type = node.get_attribute('type').downcase.gsub(' ', '')
     return '<p align="center"/>' if type == 'strikethrough'
-    inner_text = node.children.to_xhtml
+    inner_text = node.inner_html.strip
     replace = case type
               when 'bold|italic|smallcaps'
                 "<emph type=\"10\"><emph type=\"6\">#{inner_text}</emph></emph>"
@@ -34,5 +34,6 @@ class StyleTag
     node.name = 'p'
     node.set_attribute('align', (front_matter ? 'center' : 'left'))
     node.remove_attribute 'type'
+    node.inner_html = replace
   end
 end

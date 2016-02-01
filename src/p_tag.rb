@@ -1,7 +1,10 @@
 class PTag
-  def self.replacement_str(type, inner_text, chapter_index, front_matter)
-    type = type.downcase.gsub(' ', '')
-    front_matter ? front_matter_replace(type, inner_text) : body_replace(type, inner_text, chapter_index)
+  def self.process_node(node, chapter_index, front_matter)
+    type = node.get_attribute('type').downcase.gsub(' ', '')
+    inner_text = node.inner_html.strip
+    replace = front_matter ? front_matter_replace(type, inner_text) : body_replace(type, inner_text, chapter_index)
+    node.add_next_sibling(replace) if replace
+    node.remove
   end
 
   def self.front_matter_replace(type, inner_text)
@@ -51,11 +54,11 @@ class PTag
       "<bq><p align=\"left\">#{inner_text}</p></bq>"
     when 'ext1_s+bold', 'ext1_m+bold', 'ext1_e+bold'
       "<bq><p align=\"left\"><emph type=\"1\">#{inner_text}</emph></p></bq>"
-    when /enottxt\(cont/.match(text), /ext1/.match(text)
+    when /enottxt\(cont/.match(type), /ext1/.match(type)
       "<bq><p>#{inner_text}</p></bq"
     when 'annotationtext', 'ack', 'body(first)', 'bodyfirst', 'indexalpha', 'index1', 'normal', 'placehld',
-         'tb_fl', 'th_fl', 'txacknowledgments', /xpara/.match(text), /copyright/.match(text), /enottxt/.match(text),
-         /tabletext/.match(text)
+         'tb_fl', 'th_fl', 'txacknowledgments', /xpara/.match(type), /copyright/.match(type), /enottxt/.match(type),
+         /tabletext/.match(type)
       "<p align=\"left\">#{inner_text}</p>"
     when 'ca', 'letterauthor'
       "<p align=\"right\">#{inner_text}</p>"
@@ -65,11 +68,11 @@ class PTag
       "<subtitle>#{inner_text}</subtitle>"
     when 'cn', 'ct', '-ct', 'en', 'et', 'extt', 'pt'
       "<title>#{inner_text}</title>"
-    when /spcbrk2/.match(text)
+    when /spcbrk2/.match(type)
       '<break type="graphic"/>'
     when '1/2ls'
       "<break type=\"space\"/><bq><p>#{inner_text}</p></bq>"
-    when '1ls', /spcbrk/.match(text)
+    when '1ls', /spcbrk/.match(type)
       '<break type="space"/>'
     end
   end

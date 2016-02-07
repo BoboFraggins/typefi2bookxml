@@ -21,13 +21,13 @@ class TypefiDocument
       content.children.first.add_previous_sibling(@body)
       content.children.first.add_previous_sibling(@front)
     end
-    chapter = 0
-    @doc.xpath('//section').each do |section|
+    chapter_index = 0
+    @doc.xpath('//section').each_with_index do |section, section_index|
       type = section.get_attribute('type').downcase
       front_matter = !!/frontmatter/.match(type)
-      chapter += 1 unless front_matter
-      section.children.each { |node| parse_node!(node, chapter, front_matter) }
-      SectionTag.process_node(section, chapter, front_matter)
+      chapter_index += 1 unless front_matter
+      section.children.each { |node| parse_node!(node, section_index + 1, chapter_index, front_matter) }
+      SectionTag.process_node(section, section_index + 1, chapter_index, front_matter)
     end
     @doc.xpath('//supmatl').each { |supmatl| supmatl.parent = @front }
     @doc.xpath('//chapter').each { |chapter| chapter.parent = @body }
@@ -38,19 +38,19 @@ class TypefiDocument
     @doc.to_xhtml
   end
 
-  def parse_node!(node, section_index, front_matter)
-    node.children.each { |child| parse_node!(child, section_index, front_matter) }
+  def parse_node!(node, section_index, chapter_index, front_matter)
+    node.children.each { |child| parse_node!(child, section_index, chapter_index, front_matter) }
     case node.name.downcase
     when 'c'
-      CTag.process_node(node, section_index, front_matter)
+      CTag.process_node(node, section_index, chapter_index, front_matter)
     when 'p'
-      PTag.process_node(node, section_index, front_matter)
+      PTag.process_node(node, section_index, chapter_index, front_matter)
     when 'style'
-      StyleTag.process_node(node, section_index, front_matter)
+      StyleTag.process_node(node, section_index, chapter_index, front_matter)
     when 'context'
-      ContextTag.process_node(node, section_index, front_matter)
+      ContextTag.process_node(node, section_index, chapter_index, front_matter)
     when 'fieldset'
-      FieldSetTag.process_node(node, section_index, front_matter)
+      FieldSetTag.process_node(node, section_index, chapter_index, front_matter)
     when 's', 't'
       node.remove
     end

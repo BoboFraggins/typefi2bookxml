@@ -1,8 +1,8 @@
 class PTag
-  def self.process_node(node, chapter_index, front_matter)
+  def self.process_node(node, section_index, chapter_index, front_matter)
     type = node.get_attribute('type').downcase.gsub(' ', '')
     inner_text = node.inner_html.strip
-    replace = front_matter ? front_matter_replace(type, inner_text) : body_replace(type, inner_text, chapter_index)
+    replace = front_matter ? front_matter_replace(type, inner_text) : body_replace(type, inner_text, section_index)
     node.add_next_sibling(replace) if replace
     node.remove
   end
@@ -16,7 +16,7 @@ class PTag
     end
   end
 
-  def self.body_replace(type, inner_text, chapter_index)
+  def self.body_replace(type, inner_text, section_index)
     return "<p>#{inner_text}</p>" if type == 'bib'
     case type
     when 'bl1_s', 'bl1_m', 'bl1_e'
@@ -33,8 +33,8 @@ class PTag
       "<bq><p><bq><p>#{inner_text}</p></bq></p></bq>"
     # when 'figureholder'
     #   "<fig id=\"???\" scale=\"1\"/>"
-    # when 'fnottxt', 'footnotetext'
-    #   "<p><footnote id=\"fn_#{chapter_index}_1\"><p>#{inner_text}</p></footnote></p>"
+    when 'fnottxt', 'footnotetext'
+      "<p><footnote id=\"fn_#{section_index}_1\"><p>#{inner_text}</p></footnote></p>"
     when 'heading1run-in'
       "<p align=\"center\"><emph type=\"1\"><emph type=\"6\">#{inner_text}</emph></emph></p>"
     when 'headingb'

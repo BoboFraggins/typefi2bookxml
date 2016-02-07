@@ -1,5 +1,5 @@
 class SectionTag
-  def self.process_node(node, chapter_index, front_matter)
+  def self.process_node(node, section_index, chapter_index, front_matter)
     type = node.get_attribute('type').downcase.gsub(' ', '')
     inner_text = node.inner_html.strip
     replace = if front_matter

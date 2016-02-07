@@ -1,5 +1,5 @@
 class StyleTag
-  def self.process_node(node, _, front_matter)
+  def self.process_node(node, _, _, front_matter)
     type = node.get_attribute('type').downcase.gsub(' ', '')
     return '<p align="center"/>' if type == 'strikethrough'
     inner_text = node.inner_html.strip

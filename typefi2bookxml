@@ -17,11 +17,15 @@ module Typefi2bookxml
           puts "ERROR: file does not exist: #{file}"
           exit
         end
+        new_file = file.gsub('.cxml', '.xml')
+        if File.exist? new_file
+          puts "ERROR: output file already exists: #{new_file}"
+          exit
+        end
         begin
           doc = TypefiDocument.new(file)
           doc.parse!
-          puts "<?xml version=\"1.0\" encoding=\"utf-8\"?><!DOCTYPE book SYSTEM \"bookXML/book-driver.dtd\">#{doc.contents}"
-          # BookXmlDocument.new(doc).write!
+          write_file(new_file, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE book SYSTEM \"bookXML/book-driver.dtd\">\n#{doc.contents}")
         rescue Typefi2bookxmlError => ex
           puts "ERROR: #{ex.message}"
         end
@@ -48,6 +52,10 @@ module Typefi2bookxml
       end.parse!
 
       [params, files]
+    end
+
+    def write_file(filename, content)
+      File.open(filename, 'w') {|f| f.write(content) }
     end
   end
 end

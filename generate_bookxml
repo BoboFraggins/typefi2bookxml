@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+export GEM_HOME=`pwd`/vendor/bundle/ruby/2.0.0
+export GEM_PATH=`pwd`/vendor/bundle/ruby/2.0.0
+export PATH=`pwd`/vendor/bundle/ruby/2.0.0/bin:$PATH
+./typefi2bookxml --version
+./typefi2bookxml "$@"

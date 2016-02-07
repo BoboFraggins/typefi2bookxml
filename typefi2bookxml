@@ -20,6 +20,7 @@ module Typefi2bookxml
         begin
           doc = TypefiDocument.new(file)
           doc.parse!
+          puts "<?xml version=\"1.0\" encoding=\"utf-8\"?><!DOCTYPE book SYSTEM \"bookXML/book-driver.dtd\">#{doc.contents}"
           # BookXmlDocument.new(doc).write!
         rescue Typefi2bookxmlError => ex
           puts "ERROR: #{ex.message}"

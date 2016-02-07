@@ -8,7 +8,12 @@ class PTag
   end
 
   def self.front_matter_replace(type, inner_text)
-    "<p align=\"center\">#{inner_text}</p>"
+    case type
+    when 'cn', 'ct', '-ct', 'en', 'et', 'extt', 'pt'
+      "<title>#{inner_text}</title>"
+    else
+      "<p align=\"center\">#{inner_text}</p>"
+    end
   end
 
   def self.body_replace(type, inner_text, chapter_index)

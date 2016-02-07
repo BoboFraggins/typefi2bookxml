@@ -13,7 +13,7 @@ class SectionTag
                 when 'endnotes', 'backmatter'
                   "<notes>#{inner_text}</notes>"
                 else
-                  "<chapter id=\"c#{chapter_index}\"></chapter>"
+                  "<chapter id=\"c#{sprintf("%02d", chapter_index)}\">#{inner_text}</chapter>"
                 end
               end
     node.add_next_sibling(replace)

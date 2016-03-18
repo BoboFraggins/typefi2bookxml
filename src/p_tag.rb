@@ -17,7 +17,7 @@ class PTag
   end
 
   def self.body_replace(type, inner_text, section_index)
-    return "<p>#{inner_text}</p>" if type == 'bib'
+    return "<p>#{inner_text}</p>" if type == 'bib' || type == 'normal'
     case
     when ['bl1_s', 'bl1_m', 'bl1_e'].include?(type)
       "<break/><list type=\"4\"><item><p align=\"left\">#{inner_text}</p></item></list><break/>"
@@ -61,7 +61,7 @@ class PTag
       "<bq><p align=\"left\"><emph type=\"1\">#{inner_text}</emph></p></bq>"
     when /enottxt\(cont/.match(type) || /ext1/.match(type)
       "<bq><p>#{inner_text}</p></bq"
-    when ['annotationtext', 'ack', 'body(first)', 'bodyfirst', 'indexalpha', 'index1', 'normal', 'placehld',
+    when ['annotationtext', 'ack', 'body(first)', 'bodyfirst', 'indexalpha', 'index1', 'placehld',
          'tb_fl', 'th_fl', 'txacknowledgments'].include?(type)
       "<p align=\"left\">#{inner_text}</p>"
     when /xpara/.match(type) || /copyright/.match(type) || /enottxt/.match(type) || /tabletext/.match(type)

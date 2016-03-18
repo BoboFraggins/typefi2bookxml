@@ -35,7 +35,7 @@ class TypefiDocument
   end
 
   def contents
-    @doc.to_xhtml
+    PostProcessor.cleanup(@doc.to_xhtml)
   end
 
   def parse_node!(node, section_index, chapter_index, front_matter)
@@ -51,8 +51,13 @@ class TypefiDocument
       ContextTag.process_node(node, section_index, chapter_index, front_matter)
     when 'fieldset'
       FieldSetTag.process_node(node, section_index, chapter_index, front_matter)
-    when 's', 't'
+    when 'image'
+      ImageTag.process_node(node, section_index, chapter_index, front_matter)
+    when 'l', 's', 't'
       node.remove
+    when 'text'
+    else
+      puts "Warning: Unrecognized '#{node.name}' tag"
     end
   end
 end

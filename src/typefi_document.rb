@@ -53,7 +53,13 @@ class TypefiDocument
       FieldSetTag.process_node(node, section_index, chapter_index, front_matter)
     when 'image'
       ImageTag.process_node(node, section_index, chapter_index, front_matter)
-    when 'l', 's', 't'
+    when 'anchor'
+      AnchorTag.process_node(node, section_index, chapter_index, front_matter)
+    when 'xref'
+      XRefTag.process_node(node, section_index, chapter_index, front_matter)
+    when 'link'
+      LinkTag.process_node(node, section_index, chapter_index, front_matter)
+    when 'l', 's', 't', 'endanchor'
       node.remove
     when 'text'
     else

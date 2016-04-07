@@ -2,17 +2,21 @@ class PTag
   def self.process_node(node, section_index, chapter_index, front_matter)
     type = node.get_attribute('type').downcase.gsub(' ', '')
     inner_text = node.inner_html.strip
-    replace = front_matter ? front_matter_replace(type, inner_text) : body_replace(type, inner_text, section_index)
+    replace = front_matter ? front_matter_replace(node, type, inner_text) : body_replace(type, inner_text, section_index)
     node.add_next_sibling(replace) if replace
     node.remove
   end
 
-  def self.front_matter_replace(type, inner_text)
+  def self.front_matter_replace(node, type, inner_text)
     case type
     when 'cn', 'ct', '-ct', 'en', 'et', 'extt', 'pt'
       "<title>#{inner_text}</title>"
     else
-      "<p align=\"center\">#{inner_text}</p>"
+      if node.parent.xpath('(p)[1]')[0] == node
+        "<p align='left'>#{inner_text}</p>"
+      else
+        "<p>#{inner_text}</p>"
+      end
     end
   end
 

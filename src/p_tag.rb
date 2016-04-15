@@ -2,7 +2,7 @@ class PTag
   def self.process_node(node, section_index, chapter_index, front_matter)
     type = node.get_attribute('type').downcase.gsub(' ', '')
     inner_text = node.inner_html.strip
-    replace = front_matter ? front_matter_replace(node, type, inner_text) : body_replace(type, inner_text, section_index)
+    replace = front_matter ? front_matter_replace(node, type, inner_text) : body_replace(node, type, inner_text, section_index)
     node.add_next_sibling(replace) if replace
     node.remove
   end
@@ -20,7 +20,8 @@ class PTag
     end
   end
 
-  def self.body_replace(type, inner_text, section_index)
+  def self.body_replace(node, type, inner_text, section_index)
+    return "<p align='left'>#{inner_text}</p>" if (node.parent.xpath('(p)[1]')[0] == node)
     return "<p>#{inner_text}</p>" if type == 'bib' || type == 'normal'
     case
     when ['bl1_s', 'bl1_m', 'bl1_e'].include?(type)

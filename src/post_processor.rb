@@ -1,7 +1,7 @@
 # encoding: UTF-8
 class PostProcessor
   def self.cleanup(dirty_xhtml)
-    strip_thin_spaces(fix_entities(dirty_xhtml))
+    fix_white_space(strip_thin_spaces(fix_entities(dirty_xhtml)))
   end
 
   def self.strip_thin_spaces(dirty_xhtml)
@@ -19,5 +19,14 @@ class PostProcessor
     dirty_xhtml.gsub!('STUB_OUT_LT_CHAR_ENTITY', '&lt;')
     dirty_xhtml.gsub!('STUB_OUT_GRAPHIC_BREAK_ENTITY', '&#x02026;')
     dirty_xhtml
+  end
+
+  def self.fix_white_space(dirty_xhtml)
+    block_tags = ['p', 'title', 'subtitle', 'bq', 'break', 'supmatl', 'chapter', 'notes']
+    block_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/\<\/#{tag}\>[\s]*/, "</#{tag}>\n") }
+    inline_tags = ['emph', 'fnoteref']
+    inline_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/[\s]+\<#{tag}/, "<#{tag}") }
+    inline_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/\<\/#{tag}\>[\s]+/, "</#{tag}>") }
+    dirty_xhtml.gsub(/\s[\s]+/, ' ')
   end
 end

@@ -12,7 +12,7 @@ class PTag
     when 'cn', 'ct', '-ct', 'en', 'et', 'extt', 'pt'
       "<title>#{inner_text}</title>"
     else
-      if node.parent.xpath('(p)[1]')[0] == node
+      if (node.parent.xpath('(p)[1]')[0] == node) && (type == 'normal')
         "<p align='left'>#{inner_text}</p>"
       else
         "<p>#{inner_text}</p>"
@@ -21,7 +21,7 @@ class PTag
   end
 
   def self.body_replace(node, type, inner_text, section_index)
-    return "<p align='left'>#{inner_text}</p>" if (node.parent.xpath('(p)[1]')[0] == node)
+    return "<p align='left'>#{inner_text}</p>" if (node.parent.xpath('(p)[1]')[0] == node) && (type == 'normal')
     return "<p>#{inner_text}</p>" if type == 'bib' || type == 'normal'
     case
     when ['bl1_s', 'bl1_m', 'bl1_e'].include?(type)

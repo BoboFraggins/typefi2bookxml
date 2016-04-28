@@ -25,8 +25,10 @@ class PostProcessor
     block_tags = ['p', 'title', 'subtitle', 'bq', 'break', 'supmatl', 'chapter', 'notes']
     block_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/\<\/#{tag}\>[\s]*/, "</#{tag}>\n") }
     inline_tags = ['emph', 'fnoteref']
-    inline_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/[\s]+\<#{tag}/, "<#{tag}") }
-    inline_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/\<\/#{tag}\>[\s]+/, "</#{tag}>") }
+    inline_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/[\s]+\<#{tag}/, " <#{tag}") }
+    inline_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub(/\<\/#{tag}\>[\s]+/, "</#{tag}> ") }
+    self_closing_tags = ['break', 'fig']
+    self_closing_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub("></#{tag}>", " />") }
     dirty_xhtml.gsub(/\s[\s]+/, ' ')
   end
 end

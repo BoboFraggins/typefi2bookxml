@@ -1,7 +1,7 @@
 # encoding: UTF-8
 class PostProcessor
   def self.cleanup(dirty_xhtml)
-    fix_white_space(strip_thin_spaces(fix_entities(dirty_xhtml)))
+    remove_empty_tags(fix_white_space(strip_thin_spaces(fix_entities(dirty_xhtml))))
   end
 
   def self.strip_thin_spaces(dirty_xhtml)
@@ -30,5 +30,11 @@ class PostProcessor
     self_closing_tags = ['break', 'fig']
     self_closing_tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub("></#{tag}>", " />") }
     dirty_xhtml.gsub(/\s[\s]+/, ' ')
+  end
+
+  def self.remove_empty_tags(dirty_xhtml)
+    tags = ['title']
+    tags.each { |tag| dirty_xhtml = dirty_xhtml.gsub("<#{tag}></#{tag}>", "") }
+    dirty_xhtml
   end
 end

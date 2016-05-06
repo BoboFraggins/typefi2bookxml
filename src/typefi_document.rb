@@ -27,7 +27,7 @@ class TypefiDocument
       front_matter = !!/frontmatter/.match(type)
       chapter_index += 1 unless front_matter
       section.children.each { |node| parse_node!(node, section_index + 1, chapter_index, front_matter) }
-      SectionTag.process_node(section, section_index + 1, chapter_index, front_matter)
+      chapter_index = chapter_index + SectionTag.process_node(section, section_index + 1, chapter_index, front_matter)
     end
     @doc.xpath('//supmatl').each { |supmatl| supmatl.parent = @front }
     @doc.xpath('//chapter').each { |chapter| chapter.parent = @body }
@@ -49,8 +49,6 @@ class TypefiDocument
       StyleTag.process_node(node, section_index, chapter_index, front_matter)
     when 'context'
       ContextTag.process_node(node, section_index, chapter_index, front_matter)
-    when 'fieldset'
-      FieldSetTag.process_node(node, section_index, chapter_index, front_matter)
     when 'image'
       ImageTag.process_node(node, section_index, chapter_index, front_matter)
     when 'anchor'
@@ -59,7 +57,7 @@ class TypefiDocument
       XRefTag.process_node(node, section_index, chapter_index, front_matter)
     when 'link'
       LinkTag.process_node(node, section_index, chapter_index, front_matter)
-    when 'l', 's', 't', 'endanchor'
+    when 'l', 's', 't', 'endanchor', 'fieldset'
       node.remove
     when 'text'
     else

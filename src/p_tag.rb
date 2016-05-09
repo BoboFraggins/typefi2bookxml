@@ -8,6 +8,7 @@ class PTag
   end
 
   def self.front_matter_replace(node, type, inner_text)
+    return "<p align='center'>#{inner_text}</p>" if /copyright/.match(type)
     case type
     when 'cn', 'ct', '-ct', 'en', 'et', 'extt', 'pt'
       "<title>#{inner_text}</title>"
@@ -21,6 +22,7 @@ class PTag
   end
 
   def self.body_replace(node, type, inner_text, section_index)
+    return "<p align='left'>#{inner_text}</p>" if node.previous_element && node.previous_element.name.downcase == 'break'
     return "<p align='left'>#{inner_text}</p>" if (node.parent.xpath('(p)[1]')[0] == node) && (type == 'normal')
     return "<p>#{inner_text}</p>" if type == 'bib' || type == 'normal'
     case
@@ -35,7 +37,7 @@ class PTag
     when 'ep1_2' == type
       "<bq><p align=\"center\">#{inner_text}</p></bq>"
     when 'ext2' == type
-      "<bq><p><bq><p>#{inner_text}</p></bq></p></bq>"
+      "<bq><p>#{inner_text}</p></bq>"
     # when 'figureholder' == type
     #   "<fig id=\"???\" scale=\"1\"/>"
     when ['fnottxt', 'footnotetext'].include?(type)

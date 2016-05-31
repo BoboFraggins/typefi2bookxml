@@ -5,7 +5,7 @@ class SectionTag
     inner_text = node.inner_html.strip
     replace = if front_matter
                 if type == 'frontmatterintroduction'
-                  "<supmatl><title>#{inner_text}</title></supmatl>"
+                  "<supmatl title='#{inner_text.gsub("'", "")}'><title>#{inner_text}</title></supmatl>"
                 else
                   "<supmatl>#{inner_text}</supmatl>"
                 end

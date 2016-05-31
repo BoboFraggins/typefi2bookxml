@@ -29,9 +29,17 @@ class TypefiDocument
       section.children.each { |node| parse_node!(node, section_index + 1, chapter_index, front_matter) }
       chapter_index = chapter_index + SectionTag.process_node(section, section_index + 1, chapter_index, front_matter)
     end
-    @doc.xpath('//supmatl').each { |supmatl| supmatl.parent = @front }
-    @doc.xpath('//chapter').each { |chapter| chapter.parent = @body }
-    @doc.xpath('//notes').each { |notes| notes.parent = @back }
+    i = 1
+    [['//supmatl', @front], ['//chapter', @body], ['//notes', @back]].each do |part|
+      @doc.xpath(part[0]).each do |tag|
+        title = tag.get_attribute('title')
+        title ||= tag.xpath('title')[0].inner_text.gsub("\n", '') if tag.xpath('title').length > 0
+        Nokogiri::XML::Comment.new(tag, "leaf#{sprintf('%03d', i)}: page:#{i} (#{i}) bkmk:#{i} ([#{title}])").parent = part[1]
+        tag.remove_attribute 'title'
+        tag.parent = part[1]
+        i += 1
+      end
+    end
   end
 
   def contents

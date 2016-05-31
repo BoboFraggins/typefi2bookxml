@@ -27,7 +27,7 @@ class StyleTag
               when type == 'subscript'
                 "<emph type=\"8\">#{inner_text}</emph>"
               when type == 'allcaps'
-                inner_text.to_upper
+                inner_text.upcase
               else
                 inner_text
               end

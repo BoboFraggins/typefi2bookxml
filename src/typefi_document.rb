@@ -9,6 +9,7 @@ class TypefiDocument
       @body = Nokogiri::XML::Node.new 'body', @doc
       @back = Nokogiri::XML::Node.new 'back', @doc
       @doc.remove_namespaces!
+      PreProcessor.fix_dom!(@doc)
     rescue Nokogiri::XML::SyntaxError
       raise Typefi2bookxmlError.new('Cannot parse input file. XML is not well formed.')
     end
@@ -65,11 +66,13 @@ class TypefiDocument
       XRefTag.process_node(node, section_index, chapter_index, front_matter)
     when 'link'
       LinkTag.process_node(node, section_index, chapter_index, front_matter)
+    when 'ol'
+      OlTag.process_node(node, section_index, chapter_index, front_matter)
     when 'l', 's', 't', 'endanchor', 'fieldset'
       node.remove
-    when 'text'
+    when 'text', 'box'
     else
-      puts "Warning: Unrecognized '#{node.name}' tag"
+      puts "Warning: Unrecognized '#{node.name}' tag."
     end
   end
 end

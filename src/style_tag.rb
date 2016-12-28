@@ -26,8 +26,10 @@ class StyleTag
                 "<emph type=\"7\">#{inner_text}</emph>"
               when type == 'subscript'
                 "<emph type=\"8\">#{inner_text}</emph>"
+              when type == 'titlesmall'
+                "<span class=\"smallcaps\">#{inner_text}</span>"
               when type == 'allcaps'
-                inner_text.upcase
+                "<span class=\"allcaps\">#{inner_text}</span>"
               else
                 inner_text
               end

@@ -3,9 +3,9 @@ class CTag
     type = node.get_attribute('type').downcase.gsub(' ', '')
     inner_text = node.inner_html.strip
     replace = case type
-              when 'bold'
+              when 'bold', 'glossaryterm'
                 "<emph type=\"1\">#{inner_text}</emph>"
-              when 'italic'
+              when 'italic', 'ital'
                 "<emph type=\"2\">#{inner_text}</emph>"
               when 'roman'
                 "<emph type=\"3\">#{inner_text}</emph>"
@@ -19,8 +19,10 @@ class CTag
                 end
               when 'enr'
                 "<fnoteref rids=\"fnr_#{section_index}_#{inner_text}\">#{inner_text}</fnoteref>"
-             #  when 'url'
-             #    "???"
+             when 'runinhed1', 'runinhed2'
+               "<span class=\"#{type}\">#{inner_text}</span>"
+              when /xchar/.match(type)
+                "<span class=\"#{type}\">#{inner_text}</span>"
               else
                 inner_text
               end

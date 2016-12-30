@@ -3,7 +3,7 @@ class PTag
     raw_type = node.get_attribute('type')
     type = raw_type.downcase.gsub(' ', '')
     inner_text = node.inner_html.strip
-    replace = front_matter ? front_matter_replace(node, raw_type, type, inner_text) : body_replace(node, type, inner_text, section_index)
+    replace = front_matter ? front_matter_replace(node, raw_type, type, inner_text) : body_replace(node, raw_type, type, inner_text, section_index)
     node.add_next_sibling(replace) if replace
     node.remove
   end
@@ -36,10 +36,10 @@ class PTag
     return "<p align='left'>#{inner_text}</p>" if node.previous_element && node.previous_element.name.downcase == 'break'
     return "<p align='left'>#{inner_text}</p>" if (node.parent.xpath('(p)[1]')[0] == node) && (type == 'normal')
     return "<p>#{inner_text}</p>" if ['bib', 'normal', 'text', '[basicparagraph]', 'chapopenertext'].include?(type)
-    return extract(node, raw_type, type, inner_text, section_index) if type.starts_with?('extract')
-    return dialog(node, raw_type, type, inner_text, section_index) if type.starts_with?('dialog')
-    return verse(node, raw_type, type, inner_text, section_index) if type.starts_with?('verse')
-    return list(node, raw_type, type, inner_text, section_index) if type.starts_with?('bulletedlist') || type.starts_with?('numlist') || type.starts_with?('unmarkedlist')
+    return extract(node, raw_type, type, inner_text, section_index) if type.start_with?('extract')
+    return dialog(node, raw_type, type, inner_text, section_index) if type.start_with?('dialog')
+    return verse(node, raw_type, type, inner_text, section_index) if type.start_with?('verse')
+    return list(node, raw_type, type, inner_text, section_index) if type.start_with?('bulletedlist') || type.start_with?('numlist') || type.start_with?('unmarkedlist')
     case
     when ['bl1_s', 'bl1_m', 'bl1_e'].include?(type)
       "<break/><list type=\"4\"><item><p align=\"left\">#{inner_text}</p></item></list><break/>"

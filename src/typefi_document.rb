@@ -66,11 +66,11 @@ class TypefiDocument
       XRefTag.process_node(node, section_index, chapter_index, front_matter)
     when 'link'
       LinkTag.process_node(node, section_index, chapter_index, front_matter)
-    when 'ol'
-      OlTag.process_node(node, section_index, chapter_index, front_matter)
-    when 'l', 's', 't', 'endanchor', 'fieldset'
+    when 'ol', 'ul', 'li'
+      ListTags.process_node(node, section_index, chapter_index, front_matter)
+    when 'l', 's', 't', 'endanchor', 'fieldset', 'colspec'
       node.remove
-    when 'text', 'box'
+    when 'text', 'box', 'comment', 'entry', 'row', 'table', 'tbody', 'tgroup', 'footnote'
     else
       puts "Warning: Unrecognized '#{node.name}' tag."
     end

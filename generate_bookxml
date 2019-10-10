@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
-export GEM_HOME=`pwd`/vendor/bundle/ruby/2.0.0
-export GEM_PATH=`pwd`/vendor/bundle/ruby/2.0.0
-export PATH=`pwd`/vendor/bundle/ruby/2.0.0/bin:$PATH
+export TERMINFO=/usr/share/terminfo
+export TERM=xterm-basic
+export GEM_HOME=`pwd`/vendor/bundle/ruby/2.2.0
+export GEM_PATH=`pwd`/vendor/bundle/ruby/2.2.0
+export PATH=`pwd`/vendor/ruby/bin:`pwd`/vendor/ruby/bin.real:/bin:/usr/bin:/opt/ImageMagick/bin
 ./typefi2bookxml --version
 ./typefi2bookxml "$@"

@@ -3,5 +3,5 @@ FILE=`pwd`/typefi2bookxml.platypus
 TMPL=`pwd`/typefi2bookxml.platypus.tmpl
 REPLACE=`pwd`
 
-rm $FILE
+rm -f $FILE
 sed "s/REPLACE_PWD/$(echo $REPLACE | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/g" $TMPL > $FILE

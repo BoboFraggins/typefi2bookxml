@@ -2,4 +2,4 @@ source 'https://rubygems.org'
 
 gem 'htmlentities'
 gem 'minitest'
-gem 'nokogiri', '1.6.6.2'
+gem 'nokogiri', '1.10.8'
